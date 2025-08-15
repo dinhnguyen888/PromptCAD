@@ -1,0 +1,24 @@
+fastapi
+uvicorn
+google-generativeai
+python-dotenv
+
+# RAG components
+langchain
+langchain-community
+faiss-cpu
+
+# Prompt engineering & parsing
+langchain-google-genai
+jinja2
+motor
+passlib[bcrypt]
+PyJWT
+pydantic[email]
+
+# Excel handling
+pandas
+openpyxl
+
+# Form data handling
+python-multipart

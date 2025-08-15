@@ -1,0 +1,2 @@
+﻿Hình trụ: Có 2 đáy hình tròn song song, chiều cao là khoảng cách giữa 2 đáy.
+Hình hộp: Có 6 mặt phẳng, đối diện song song bằng nhau.

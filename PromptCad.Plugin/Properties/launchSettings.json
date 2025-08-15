@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "PromptCad.Plugin": {
+      "commandName": "Project",
+      "commandLineArgs": "/b"
+    },
+    "PromptCad.Solutions": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Autodesk\\AutoCAD 2025\\acad.exe",
+      "commandLineArgs": "/nologo /product ACAD /b \"$(TargetDir)LoadPromptCAD.scr\""
+    }
+  }
+}
