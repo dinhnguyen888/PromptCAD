@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 from app.routers import shape
 from app.routers import auth, api_key
-from app.db.mongo import get_collection
+from app.db.indexes import ensure_indexes
+from app.core.config import get_gemini_api_key
+from app.services.models import print_available_models
 
 # Load .env
 load_dotenv()
@@ -13,22 +15,16 @@ load_dotenv()
 async def lifespan(app: FastAPI):
     # Startup logic
     try:
-        # Accounts
-        accounts = get_collection("accounts")
-        await accounts.create_index("email", unique=True)
-
-        # API keys
-        api_keys = get_collection("api_keys")
-        await api_keys.create_index("key", unique=True)
-        # Auto delete API keys 3 days after their expires_at
-        await api_keys.create_index("expires_at", expireAfterSeconds=3 * 24 * 3600)
-
-        # Admin tokens should expire exactly at expires_at
-        admin_tokens = get_collection("admin_tokens")
-        await admin_tokens.create_index("expires_at", expireAfterSeconds=0)
+        await ensure_indexes()
     except Exception as e:
         # Allow app to start even if MongoDB is not reachable
         print(f"[startup] Skipping index creation: {e}")
+
+    # Print model listing (best-effort)
+    try:
+        print_available_models(get_gemini_api_key())
+    except Exception as e:
+        print(f"[startup] Skipping model listing: {e}")
 
     yield  # App runs here
 

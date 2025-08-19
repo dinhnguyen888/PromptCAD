@@ -5,7 +5,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.db.mongo import get_collection
 from app.schemas.auth import AdminLoginRequest, TokenResponse
 from app.core.security import verify_password, hash_password, create_jwt, get_current_admin
-from app.core.config import get_admin_bootstrap
+from app.services.admin import get_or_create_admin_account, create_admin_session, invalidate_admin_token, find_admin_token
 
 
 router = APIRouter()
@@ -13,20 +13,9 @@ router = APIRouter()
 
 @router.post("/admin-login", response_model=TokenResponse)
 async def admin_login(payload: AdminLoginRequest):
-    accounts = get_collection("accounts")
-
-    account = await accounts.find_one({"email": payload.email})
-
+    account = await get_or_create_admin_account(payload.email, payload.password)
     if account is None:
-        env_admin_email, env_admin_password = get_admin_bootstrap()
-        if env_admin_email and env_admin_password and payload.email.lower() == env_admin_email.lower() and payload.password == env_admin_password:
-            from app.models.entities import Account
-
-            new_account = Account(email=payload.email, password_hash=hash_password(payload.password), role="admin")
-            insert_res = await accounts.insert_one(new_account.dict(by_alias=True))
-            account = await accounts.find_one({"_id": insert_res.inserted_id})
-        else:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
     if account.get("role") != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin account required")
@@ -34,12 +23,7 @@ async def admin_login(payload: AdminLoginRequest):
     if not verify_password(payload.password, account.get("password_hash", "")):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
-    token = create_jwt({"sub": str(account.get("_id")), "role": "admin"}, expires_minutes=60 * 24)
-
-    admin_tokens = get_collection("admin_tokens")
-    expires_at = datetime.utcnow() + timedelta(minutes=60 * 24)
-    await admin_tokens.insert_one({"account_id": str(account.get("_id")), "token": token, "created_at": datetime.utcnow(), "expires_at": expires_at})
-
+    token = await create_admin_session(str(account.get("_id")))
     return TokenResponse(access_token=token)
 
 
@@ -48,10 +32,9 @@ async def admin_logout(
     admin=Depends(get_current_admin),
     credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
 ):
-    admin_tokens = get_collection("admin_tokens")
     token = credentials.credentials
-    res = await admin_tokens.delete_one({"token": token})
-    if res.deleted_count == 0:
+    deleted = await invalidate_admin_token(token)
+    if not deleted:
         return {"message": "Already logged out"}
     return {"message": "Logged out"}
 
@@ -61,9 +44,8 @@ async def check_admin_token(
     admin=Depends(get_current_admin),
     credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
 ):
-    admin_tokens = get_collection("admin_tokens")
     token = credentials.credentials
-    token_data = await admin_tokens.find_one({"token": token})
+    token_data = await find_admin_token(token)
     if not token_data:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
     return {"message": "Token is valid", "account_id": token_data.get("account_id")}

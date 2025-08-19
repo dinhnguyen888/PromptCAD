@@ -5,12 +5,16 @@ Yêu cầu người dùng: {{ prompt }}
 Thông tin tham khảo:
 {{ context }}
 
+Ghi chú: Nếu trong prompt có chứa comment dạng:
+<!-- INSERTION_POINT: X=..., Y=..., Z=... -->
+thì khi sinh code object (AutoLISP), bạn phải sử dụng toạ độ này làm điểm chèn (insertion point) cho đối tượng được vẽ.
+
 Phân loại yêu cầu:
 A. Type "object" - Nếu yêu cầu thuộc một trong các dạng sau:
 - Vẽ/tạo hình học (ví dụ: vẽ hình trụ, vẽ hộp chữ nhật)
 - Chỉnh sửa đối tượng (ví dụ: di chuyển, xoay, copy)
 - Thao tác với đối tượng có sẵn (ví dụ: xóa, thay đổi kích thước)
-- Và những nội dung tương tự 
+- Và những nội dung tương tự
 
 B. Type "text" - Nếu yêu cầu thuộc một trong các dạng sau:
 - Giải thích khái niệm (ví dụ: hình trụ là gì?)
@@ -21,7 +25,7 @@ B. Type "text" - Nếu yêu cầu thuộc một trong các dạng sau:
 Trả về JSON với cấu trúc:
 {
     "type": "object hoặc text",
-    "content": "phải là một chuỗi C# hợp lệ chứa code AutoLISP đã escape (có thể gán trực tiếp vào biến string trong C# và chạy với `SendStringToExecute`) nếu là object, câu trả lời nếu là text"
+    "content": "nếu type=object thì phải là một chuỗi C# hợp lệ chứa code AutoLISP đã escape (có thể gán trực tiếp vào biến string trong C# và chạy với `SendStringToExecute`). AutoLISP này PHẢI tạo đối tượng tại toạ độ được cung cấp trong INSERTION_POINT. Nếu type=text thì content chỉ là câu trả lời thông thường."
 }
 
 Chỉ trả về JSON, không thêm bất kỳ giải thích nào khác.
