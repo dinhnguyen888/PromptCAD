@@ -19,7 +19,7 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
 {
     public partial class ProcessDataServices
     {
-        public void ProcessDrawResponse(PromptResponse response)
+        public void ProcessDrawResponse(PromptResponse response, Point3d insertionPoint)
         {
             try
             {

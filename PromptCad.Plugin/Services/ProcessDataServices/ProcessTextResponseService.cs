@@ -18,7 +18,7 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
 {
     public partial class ProcessDataServices
     {
-        public void ProcessTextResponse(PromptResponse response)
+        public void ProcessTextResponse(PromptResponse response, Point3d insertionPoint)
         {
             try
             {
@@ -36,15 +36,6 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
                     // Lock document trước khi thay đổi
                     using (var docLock = doc.LockDocument())
                     {
-                        var opts = new PromptPointOptions("\nSelect insertion point for MText: ");
-                        var pointResult = ed.GetPoint(opts);
-                        if (pointResult.Status != PromptStatus.OK)
-                        {
-                            ed.WriteMessage("\nCommand cancelled.");
-                            return;
-                        }
-                        Point3d insertionPoint = pointResult.Value;
-
                         using (var tr = db.TransactionManager.StartTransaction())
                         {
                             var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
@@ -52,7 +43,7 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
 
                             var mtext = new MText
                             {
-                                Contents = response.result,
+                                Contents = WrapText(response.result, 80),
                                 Location = insertionPoint,
                                 TextHeight = 2.5,
                                 Attachment = AttachmentPoint.TopLeft
@@ -84,6 +75,23 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
 
 
 
+        }
+
+        private string WrapText(string input, int maxLineLength)
+        {
+            if (string.IsNullOrEmpty(input) || maxLineLength <= 0)
+                return input ?? string.Empty;
+
+            var sb = new StringBuilder();
+            int current = 0;
+            while (current < input.Length)
+            {
+                int take = Math.Min(maxLineLength, input.Length - current);
+                string slice = input.Substring(current, take);
+                sb.AppendLine(slice);
+                current += take;
+            }
+            return sb.ToString();
         }
     }
 }

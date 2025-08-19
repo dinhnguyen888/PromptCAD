@@ -71,93 +71,143 @@ namespace AutoCADGeminiPlugin
             Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage("\nToken ok!\n");
 
         }
-
-
         public void Terminate() { }
 
-        //[CommandMethod("PROMPTS")]
-        //public async void PromptCommand()
-        //{
-        //    var ed = Application.DocumentManager.MdiActiveDocument.Editor;
-        //    var opts = new PromptStringOptions("\nEnter your prompt: ") { AllowSpaces = true };
-        //    PromptResult result = ed.GetString(opts);
+        //private static System.EventHandler _spinnerHandler;
+        //private static ObjectId _spinnerTextId = ObjectId.Null;
+        //private static ObjectId _spinnerArcOuterId = ObjectId.Null;
+        //private static ObjectId _spinnerArcInnerId = ObjectId.Null;
+        //private static Point3d _spinnerCenter = Point3d.Origin;
 
-        //    if (result.Status != PromptStatus.OK) return;
-
-        //    string userPrompt = result.StringResult;
-        //    string apiKey = File.ReadAllText(@"D:\WORKSPACE\PROJECT\LLM_CAD\APiKey.txt").Trim();
-
-        //    // Gọi API nhưng phải tránh await trực tiếp vì prompt là đồng bộ
-        //    string response = await CallGeminiAPI(apiKey, userPrompt);
-
-        //    ed.WriteMessage($"\nGemini says: {response}");
-        //}
-
-        //private async Task<string> CallGeminiAPI(string apiKey, string prompt)
-        //{
-        //    using var client = new HttpClient();
-        //    var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={apiKey}";
-        //    var payload = new { contents = new[] { new { parts = new[] { new { text = prompt } } } } };
-        //    var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-
-        //    var resp = await client.PostAsync(url, content);
-        //    var str = await resp.Content.ReadAsStringAsync();
-        //    var j = JObject.Parse(str);
-        //    return j["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString() ?? "No response.";
-        //}
-
-        //[CommandMethod("DrawStar")]
-        //public void DrawStar()
+        //[CommandMethod("LOADINGSPINNER")]
+        //public void CreateLoadingSpinner()
         //{
         //    Document doc = Application.DocumentManager.MdiActiveDocument;
-        //    Editor ed = doc.Editor;
         //    Database db = doc.Database;
+        //    Editor ed = doc.Editor;
 
-        //    // Nhập bán kính ngoài
-        //    PromptDoubleOptions outerOpt = new PromptDoubleOptions("\nNhập bán kính ngoài của ngôi sao: ");
-        //    outerOpt.DefaultValue = 10;
-        //    PromptDoubleResult outerRes = ed.GetDouble(outerOpt);
-        //    if (outerRes.Status != PromptStatus.OK) return;
-        //    double R = outerRes.Value;
-
-        //    // Nhập bán kính trong
-        //    PromptDoubleOptions innerOpt = new PromptDoubleOptions("\nNhập bán kính trong của ngôi sao: ");
-        //    innerOpt.DefaultValue = R / 2.5;
-        //    PromptDoubleResult innerRes = ed.GetDouble(innerOpt);
-        //    if (innerRes.Status != PromptStatus.OK) return;
-        //    double r = innerRes.Value;
-
-        //    // Tính các điểm ngôi sao
-        //    Point2d center = new Point2d(0, 0);
-        //    Point2dCollection points = new Point2dCollection();
-
-        //    for (int i = 0; i < 10; i++)
+        //    var ppo = new PromptPointOptions("\nChọn vị trí hiển thị spinner: ");
+        //    var ppr = ed.GetPoint(ppo);
+        //    if (ppr.Status != PromptStatus.OK)
         //    {
-        //        double angle = Math.PI / 5 * i;
-        //        double radius = (i % 2 == 0) ? R : r;
-
-        //        double x = center.X + radius * Math.Cos(angle);
-        //        double y = center.Y + radius * Math.Sin(angle);
-        //        points.Add(new Point2d(x, y));
+        //        ed.WriteMessage("\nHủy.");
+        //        return;
         //    }
+        //    _spinnerCenter = ppr.Value;
 
-        //    // Vẽ ngôi sao
+        //    using (var docLock = doc.LockDocument())
         //    using (Transaction tr = db.TransactionManager.StartTransaction())
         //    {
         //        BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
-        //        BlockTableRecord btr = (BlockTableRecord)tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
+        //        BlockTableRecord btr = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
 
-        //        Polyline star = new Polyline();
-        //        for (int i = 0; i < points.Count; i++)
+        //        // --- Text Loading ---
+        //        var text = new DBText
         //        {
-        //            star.AddVertexAt(i, points[i], 0, 0, 0);
-        //        }
-        //        star.Closed = true;
+        //            Position = _spinnerCenter,
+        //            Height = 2.5,
+        //            TextString = "Loading...",
+        //            HorizontalMode = TextHorizontalMode.TextCenter,
+        //            VerticalMode = TextVerticalMode.TextVerticalMid,
+        //            AlignmentPoint = _spinnerCenter
+        //        };
+        //        _spinnerTextId = btr.AppendEntity(text);
+        //        tr.AddNewlyCreatedDBObject(text, true);
 
-        //        btr.AppendEntity(star);
-        //        tr.AddNewlyCreatedDBObject(star, true);
+        //        // --- Tạo cung ngoài ---
+        //        double outerRadius = 12.0;
+        //        double innerRadius = 9.0;
+        //        double startAngle = 0;
+        //        double endAngle = Math.PI * 1.5; // 270 độ
+
+        //        var arcOuter = new Arc(_spinnerCenter, outerRadius, startAngle, endAngle);
+        //        arcOuter.ColorIndex = 3;
+        //        _spinnerArcOuterId = btr.AppendEntity(arcOuter);
+        //        tr.AddNewlyCreatedDBObject(arcOuter, true);
+
+        //        // --- Tạo cung trong (offset vào trong) ---
+        //        var arcInner = new Arc(_spinnerCenter, innerRadius, startAngle, endAngle);
+        //        arcInner.ColorIndex = 3;
+        //        _spinnerArcInnerId = btr.AppendEntity(arcInner);
+        //        tr.AddNewlyCreatedDBObject(arcInner, true);
+
         //        tr.Commit();
         //    }
+
+        //    StartSpinnerIdleLoop(doc, db, ed);
         //}
+
+        //[CommandMethod("STOPSPINNER")]
+        //public void StopLoadingSpinner()
+        //{
+        //    if (_spinnerHandler != null)
+        //    {
+        //        Autodesk.AutoCAD.ApplicationServices.Application.Idle -= _spinnerHandler;
+        //        _spinnerHandler = null;
+        //    }
+
+        //    var doc = Application.DocumentManager.MdiActiveDocument;
+        //    var db = doc.Database;
+        //    using (doc.LockDocument())
+        //    using (var tr = db.TransactionManager.StartTransaction())
+        //    {
+        //        EraseIfExists(tr, _spinnerTextId);
+        //        EraseIfExists(tr, _spinnerArcOuterId);
+        //        EraseIfExists(tr, _spinnerArcInnerId);
+        //        tr.Commit();
+        //    }
+
+        //    _spinnerTextId = ObjectId.Null;
+        //    _spinnerArcOuterId = ObjectId.Null;
+        //    _spinnerArcInnerId = ObjectId.Null;
+        //}
+
+        //private void StartSpinnerIdleLoop(Document doc, Database db, Editor ed)
+        //{
+        //    if (_spinnerHandler != null) return;
+
+        //    double stepDeg = 0.5; // quay siêu chậm (0.5° mỗi Idle tick)
+
+        //    _spinnerHandler = (s, e) =>
+        //    {
+        //        try
+        //        {
+        //            using (doc.LockDocument())
+        //            using (Transaction tr2 = db.TransactionManager.StartTransaction())
+        //            {
+        //                var arcOuter = tr2.GetObject(_spinnerArcOuterId, OpenMode.ForWrite, false) as Arc;
+        //                var arcInner = tr2.GetObject(_spinnerArcInnerId, OpenMode.ForWrite, false) as Arc;
+
+        //                if (arcOuter != null && arcInner != null)
+        //                {
+        //                    Matrix3d rot = Matrix3d.Rotation(stepDeg * Math.PI / 180.0, Vector3d.ZAxis, _spinnerCenter);
+        //                    arcOuter.TransformBy(rot);
+        //                    arcInner.TransformBy(rot);
+        //                }
+
+        //                tr2.Commit();
+        //            }
+        //            ed.Regen();
+        //        }
+        //        catch
+        //        {
+        //            Autodesk.AutoCAD.ApplicationServices.Application.Idle -= _spinnerHandler;
+        //            _spinnerHandler = null;
+        //        }
+        //    };
+        //    Autodesk.AutoCAD.ApplicationServices.Application.Idle += _spinnerHandler;
+        //}
+
+        //private void EraseIfExists(Transaction tr, ObjectId id)
+        //{
+        //    if (id == ObjectId.Null) return;
+        //    var ent = tr.GetObject(id, OpenMode.ForWrite, false) as Entity;
+        //    if (ent != null && !ent.IsErased)
+        //    {
+        //        ent.Erase();
+        //    }
+        //}
+
     }
 }
+
