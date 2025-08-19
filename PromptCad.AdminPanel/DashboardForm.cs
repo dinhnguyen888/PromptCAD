@@ -37,7 +37,14 @@ namespace PromptCad.AdminPanel
             ApiKeyGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             ApiKeyGridView.AllowUserToAddRows = false;
 
+
+            PromptGridView.AutoGenerateColumns = true;
+            PromptGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            PromptGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            PromptGridView.AllowUserToAddRows = false;
+
             await LoadApiKeysAsync();
+            await LoadPromptAsync();
         }
         private List<ApiKeyInfo> _allApiKeys = new List<ApiKeyInfo>();
 
@@ -47,8 +54,27 @@ namespace PromptCad.AdminPanel
             try
             {
                 var response = await _projectServices.GetAllAPIKey();
+
                 _allApiKeys = response.ApiKeys;
                 ApiKeyGridView.DataSource = response.ApiKeys;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải API keys: " + ex.Message);
+            }
+        }
+
+        private async Task LoadPromptAsync()
+        {
+            try
+            {
+                var response = await _projectServices.GetAllPrompts();
+
+                PromptGridView.DataSource = response.Prompts ?? new List<PromptDto>();
+                PromptGridView.Columns["prompt_text"].HeaderText = "Prompt";
+                PromptGridView.Columns["created_at"].HeaderText = "Ngày tạo";
+                PromptGridView.Columns["metadata"].HeaderText = "Metadata";
+                CountPromptLabel.Text = $"{response.Count}";
             }
             catch (Exception ex)
             {
@@ -248,8 +274,8 @@ namespace PromptCad.AdminPanel
             try
             {
                 var newApiKey = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Nhập Gemini API Key mới:", 
-                    "Change Gemini API Key", 
+                    "Nhập Gemini API Key mới:",
+                    "Change Gemini API Key",
                     "");
 
                 if (!string.IsNullOrWhiteSpace(newApiKey))
@@ -335,7 +361,7 @@ namespace PromptCad.AdminPanel
 
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        var confirm = MessageBox.Show("Bạn có chắc muốn import prompts từ file này? Dữ liệu cũ sẽ bị ghi đè.", 
+                        var confirm = MessageBox.Show("Bạn có chắc muốn import prompts từ file này? Dữ liệu cũ sẽ bị ghi đè.",
                             "Xác nhận import", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                         if (confirm == DialogResult.Yes)
@@ -364,7 +390,7 @@ namespace PromptCad.AdminPanel
             try
             {
                 var content = await _projectServices.GetShapesContent();
-                
+
                 using (var form = new Form())
                 {
                     form.Text = "Shapes.txt Content";
@@ -395,7 +421,7 @@ namespace PromptCad.AdminPanel
             try
             {
                 var config = await _projectServices.GetAIModelConfig();
-                
+
                 var message = "AI Model Configuration:\n\n";
                 foreach (var model in config.Models)
                 {
@@ -418,10 +444,10 @@ namespace PromptCad.AdminPanel
             {
                 // Refresh admin session token
                 var newToken = await _projectServices.RefreshAdminSessionToken();
-                
+
                 // Lưu token mới vào file
                 File.WriteAllText(globalAPI.TokenFilePath, newToken);
-                
+
                 MessageBox.Show("Đã refresh admin token thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -430,17 +456,46 @@ namespace PromptCad.AdminPanel
             }
         }
 
-        private async void RefreshDataBtn_Click(object sender, EventArgs e)
+        private async void DeletePromptBtn_Click(object sender, EventArgs e)
         {
-            try
-            {
-                await LoadApiKeysAsync();
-                MessageBox.Show("Đã refresh dữ liệu thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi refresh dữ liệu: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Hiện form cảnh cáo, sẽ xoá hết tất cả các prompt
+            var confirm = MessageBox.Show("Bạn có chắc muốn xóa tất cả các prompt? Hành động này không thể hoàn tác.",
+                "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirm == DialogResult.Yes)
+                {
+                try
+                {
+                    var deleted = await _projectServices.DeleteAllPrompts();
+                    if (deleted)
+                    {
+                        MessageBox.Show("Đã xóa tất cả các prompt thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        await LoadPromptAsync();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xóa thất bại!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xóa các prompt: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
-                                                                                                                                                                                                        }
+
+        //private async void RefreshDataBtn_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        await LoadApiKeysAsync();
+        //        MessageBox.Show("Đã refresh dữ liệu thành công!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Lỗi khi refresh dữ liệu: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+
+    }
 }

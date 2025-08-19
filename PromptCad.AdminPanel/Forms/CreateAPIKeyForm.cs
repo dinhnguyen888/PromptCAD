@@ -15,97 +15,108 @@ namespace PromptCad.AdminPanel.Forms
 
         private void InitializeComponent()
         {
-            this.lblUserName = new Label();
-            this.txtUserName = new TextBox();
-            this.lblPhoneNumber = new Label();
-            this.txtPhoneNumber = new TextBox();
-            this.lblDuration = new Label();
-            this.cboDuration = new ComboBox();
-            this.btnOK = new Button();
-            this.btnCancel = new Button();
-            this.SuspendLayout();
-
+            lblUserName = new Label();
+            txtUserName = new TextBox();
+            lblPhoneNumber = new Label();
+            txtPhoneNumber = new TextBox();
+            lblDuration = new Label();
+            cboDuration = new ComboBox();
+            btnOK = new Button();
+            btnCancel = new Button();
+            SuspendLayout();
+            // 
             // lblUserName
-            this.lblUserName.AutoSize = true;
-            this.lblUserName.Location = new System.Drawing.Point(12, 15);
-            this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(75, 20);
-            this.lblUserName.Text = "User Name:";
-
+            // 
+            lblUserName.AutoSize = true;
+            lblUserName.Location = new Point(12, 15);
+            lblUserName.Name = "lblUserName";
+            lblUserName.Size = new Size(85, 20);
+            lblUserName.TabIndex = 0;
+            lblUserName.Text = "User Name:";
+            // 
             // txtUserName
-            this.txtUserName.Location = new System.Drawing.Point(120, 12);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(250, 27);
-            this.txtUserName.TabIndex = 0;
-
+            // 
+            txtUserName.Location = new Point(120, 12);
+            txtUserName.Name = "txtUserName";
+            txtUserName.Size = new Size(250, 27);
+            txtUserName.TabIndex = 0;
+            // 
             // lblPhoneNumber
-            this.lblPhoneNumber.AutoSize = true;
-            this.lblPhoneNumber.Location = new System.Drawing.Point(12, 48);
-            this.lblPhoneNumber.Name = "lblPhoneNumber";
-            this.lblPhoneNumber.Size = new System.Drawing.Size(100, 20);
-            this.lblPhoneNumber.Text = "Phone Number:";
-
+            // 
+            lblPhoneNumber.AutoSize = true;
+            lblPhoneNumber.Location = new Point(12, 48);
+            lblPhoneNumber.Name = "lblPhoneNumber";
+            lblPhoneNumber.Size = new Size(111, 20);
+            lblPhoneNumber.TabIndex = 1;
+            lblPhoneNumber.Text = "Phone Number:";
+            // 
             // txtPhoneNumber
-            this.txtPhoneNumber.Location = new System.Drawing.Point(120, 45);
-            this.txtPhoneNumber.Name = "txtPhoneNumber";
-            this.txtPhoneNumber.Size = new System.Drawing.Size(250, 27);
-            this.txtPhoneNumber.TabIndex = 1;
-
+            // 
+            txtPhoneNumber.Location = new Point(120, 45);
+            txtPhoneNumber.Name = "txtPhoneNumber";
+            txtPhoneNumber.Size = new Size(250, 27);
+            txtPhoneNumber.TabIndex = 1;
+            // 
             // lblDuration
-            this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(12, 81);
-            this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(100, 20);
-            this.lblDuration.Text = "Duration (months):";
-
+            // 
+            lblDuration.AutoSize = true;
+            lblDuration.Location = new Point(12, 81);
+            lblDuration.Name = "lblDuration";
+            lblDuration.Size = new Size(133, 20);
+            lblDuration.TabIndex = 2;
+            lblDuration.Text = "Duration (months):";
+            // 
             // cboDuration
-            this.cboDuration.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cboDuration.Location = new System.Drawing.Point(120, 78);
-            this.cboDuration.Name = "cboDuration";
-            this.cboDuration.Size = new System.Drawing.Size(250, 28);
-            this.cboDuration.TabIndex = 2;
-            this.cboDuration.Items.AddRange(new object[] { 3, 6, 12 });
-
+            // 
+            cboDuration.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDuration.Items.AddRange(new object[] { 3, 6, 12 });
+            cboDuration.Location = new Point(142, 78);
+            cboDuration.Name = "cboDuration";
+            cboDuration.Size = new Size(228, 28);
+            cboDuration.TabIndex = 2;
+            // 
             // btnOK
-            this.btnOK.DialogResult = DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(120, 120);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(100, 35);
-            this.btnOK.TabIndex = 3;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new EventHandler(this.btnOK_Click);
-
+            // 
+            btnOK.DialogResult = DialogResult.OK;
+            btnOK.Location = new Point(120, 120);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(100, 35);
+            btnOK.TabIndex = 3;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
+            // 
             // btnCancel
-            this.btnCancel.DialogResult = DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(230, 120);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 35);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-
+            // 
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.Location = new Point(230, 120);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(100, 35);
+            btnCancel.TabIndex = 4;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            // 
             // CreateAPIKeyForm
-            this.AcceptButton = this.btnOK;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(384, 171);
-            this.Controls.AddRange(new Control[] {
-                this.lblUserName, this.txtUserName,
-                this.lblPhoneNumber, this.txtPhoneNumber,
-                this.lblDuration, this.cboDuration,
-                this.btnOK, this.btnCancel
-            });
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "CreateAPIKeyForm";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = "Create API Key";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-            // Set default values
-            this.cboDuration.SelectedIndex = 0;
+            // 
+            AcceptButton = btnOK;
+            CancelButton = btnCancel;
+            ClientSize = new Size(384, 171);
+            Controls.Add(lblUserName);
+            Controls.Add(txtUserName);
+            Controls.Add(lblPhoneNumber);
+            Controls.Add(txtPhoneNumber);
+            Controls.Add(lblDuration);
+            Controls.Add(cboDuration);
+            Controls.Add(btnOK);
+            Controls.Add(btnCancel);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "CreateAPIKeyForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Create API Key";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private void btnOK_Click(object sender, EventArgs e)

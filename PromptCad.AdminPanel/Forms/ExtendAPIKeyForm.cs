@@ -18,99 +18,110 @@ namespace PromptCad.AdminPanel.Forms
 
         private void InitializeComponent()
         {
-            this.lblApiKey = new Label();
-            this.txtApiKey = new TextBox();
-            this.lblCurrentExpiry = new Label();
-            this.txtCurrentExpiry = new TextBox();
-            this.lblDuration = new Label();
-            this.cboDuration = new ComboBox();
-            this.btnOK = new Button();
-            this.btnCancel = new Button();
-            this.SuspendLayout();
-
+            lblApiKey = new Label();
+            txtApiKey = new TextBox();
+            lblCurrentExpiry = new Label();
+            txtCurrentExpiry = new TextBox();
+            lblDuration = new Label();
+            cboDuration = new ComboBox();
+            btnOK = new Button();
+            btnCancel = new Button();
+            SuspendLayout();
+            // 
             // lblApiKey
-            this.lblApiKey.AutoSize = true;
-            this.lblApiKey.Location = new System.Drawing.Point(12, 15);
-            this.lblApiKey.Name = "lblApiKey";
-            this.lblApiKey.Size = new System.Drawing.Size(75, 20);
-            this.lblApiKey.Text = "API Key:";
-
+            // 
+            lblApiKey.AutoSize = true;
+            lblApiKey.Location = new Point(12, 15);
+            lblApiKey.Name = "lblApiKey";
+            lblApiKey.Size = new Size(62, 20);
+            lblApiKey.TabIndex = 0;
+            lblApiKey.Text = "API Key:";
+            // 
             // txtApiKey
-            this.txtApiKey.Location = new System.Drawing.Point(120, 12);
-            this.txtApiKey.Name = "txtApiKey";
-            this.txtApiKey.Size = new System.Drawing.Size(350, 27);
-            this.txtApiKey.TabIndex = 0;
-            this.txtApiKey.ReadOnly = true;
-
+            // 
+            txtApiKey.Location = new Point(120, 12);
+            txtApiKey.Name = "txtApiKey";
+            txtApiKey.ReadOnly = true;
+            txtApiKey.Size = new Size(350, 27);
+            txtApiKey.TabIndex = 0;
+            // 
             // lblCurrentExpiry
-            this.lblCurrentExpiry.AutoSize = true;
-            this.lblCurrentExpiry.Location = new System.Drawing.Point(12, 48);
-            this.lblCurrentExpiry.Name = "lblCurrentExpiry";
-            this.lblCurrentExpiry.Size = new System.Drawing.Size(100, 20);
-            this.lblCurrentExpiry.Text = "Current Expiry:";
-
+            // 
+            lblCurrentExpiry.AutoSize = true;
+            lblCurrentExpiry.Location = new Point(12, 48);
+            lblCurrentExpiry.Name = "lblCurrentExpiry";
+            lblCurrentExpiry.Size = new Size(104, 20);
+            lblCurrentExpiry.TabIndex = 1;
+            lblCurrentExpiry.Text = "Current Expiry:";
+            // 
             // txtCurrentExpiry
-            this.txtCurrentExpiry.Location = new System.Drawing.Point(120, 45);
-            this.txtCurrentExpiry.Name = "txtCurrentExpiry";
-            this.txtCurrentExpiry.Size = new System.Drawing.Size(350, 27);
-            this.txtCurrentExpiry.TabIndex = 1;
-            this.txtCurrentExpiry.ReadOnly = true;
-
+            // 
+            txtCurrentExpiry.Location = new Point(120, 45);
+            txtCurrentExpiry.Name = "txtCurrentExpiry";
+            txtCurrentExpiry.ReadOnly = true;
+            txtCurrentExpiry.Size = new Size(350, 27);
+            txtCurrentExpiry.TabIndex = 1;
+            // 
             // lblDuration
-            this.lblDuration.AutoSize = true;
-            this.lblDuration.Location = new System.Drawing.Point(12, 81);
-            this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(100, 20);
-            this.lblDuration.Text = "Extend by (months):";
-
+            // 
+            lblDuration.AutoSize = true;
+            lblDuration.Location = new Point(12, 81);
+            lblDuration.Name = "lblDuration";
+            lblDuration.Size = new Size(140, 20);
+            lblDuration.TabIndex = 2;
+            lblDuration.Text = "Extend by (months):";
+            // 
             // cboDuration
-            this.cboDuration.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cboDuration.Location = new System.Drawing.Point(120, 78);
-            this.cboDuration.Name = "cboDuration";
-            this.cboDuration.Size = new System.Drawing.Size(350, 28);
-            this.cboDuration.TabIndex = 2;
-            this.cboDuration.Items.AddRange(new object[] { 3, 6, 12 });
-
+            // 
+            cboDuration.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboDuration.Items.AddRange(new object[] { 3, 6, 12 });
+            cboDuration.Location = new Point(158, 78);
+            cboDuration.Name = "cboDuration";
+            cboDuration.Size = new Size(312, 28);
+            cboDuration.TabIndex = 2;
+            // 
             // btnOK
-            this.btnOK.DialogResult = DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(220, 120);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(100, 35);
-            this.btnOK.TabIndex = 3;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new EventHandler(this.btnOK_Click);
-
+            // 
+            btnOK.DialogResult = DialogResult.OK;
+            btnOK.Location = new Point(220, 120);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(100, 35);
+            btnOK.TabIndex = 3;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
+            // 
             // btnCancel
-            this.btnCancel.DialogResult = DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(330, 120);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 35);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-
+            // 
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.Location = new Point(330, 120);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(100, 35);
+            btnCancel.TabIndex = 4;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            // 
             // ExtendAPIKeyForm
-            this.AcceptButton = this.btnOK;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(484, 171);
-            this.Controls.AddRange(new Control[] {
-                this.lblApiKey, this.txtApiKey,
-                this.lblCurrentExpiry, this.txtCurrentExpiry,
-                this.lblDuration, this.cboDuration,
-                this.btnOK, this.btnCancel
-            });
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ExtendAPIKeyForm";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = "Extend API Key";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-            // Set default values
-            this.cboDuration.SelectedIndex = 0;
+            // 
+            AcceptButton = btnOK;
+            CancelButton = btnCancel;
+            ClientSize = new Size(484, 171);
+            Controls.Add(lblApiKey);
+            Controls.Add(txtApiKey);
+            Controls.Add(lblCurrentExpiry);
+            Controls.Add(txtCurrentExpiry);
+            Controls.Add(lblDuration);
+            Controls.Add(cboDuration);
+            Controls.Add(btnOK);
+            Controls.Add(btnCancel);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ExtendAPIKeyForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Extend API Key";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private void LoadData()

@@ -37,8 +37,11 @@
             CreateApiBtn = new Button();
             PromptPage = new TabPage();
             panel4 = new Panel();
-            promptGridView = new DataGridView();
+            PromptGridView = new DataGridView();
             panel3 = new Panel();
+            label1 = new Label();
+            CountPromptLabel = new Label();
+            DeletePromptBtn = new Button();
             GetShapeFileBtn = new Button();
             ImportExcelBtn = new Button();
             ExportExcelBtn = new Button();
@@ -52,12 +55,11 @@
             ChangeAPIGeminiKeyBtn = new Button();
             ViewAIModelBtn = new Button();
             RefreshBtn = new Button();
-            RefreshDataBtn = new Button();
             panel1 = new Panel();
             panel1.SuspendLayout();
             PromptPage.SuspendLayout();
             panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)promptGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)PromptGridView).BeginInit();
             panel3.SuspendLayout();
             APIKeyPage.SuspendLayout();
             panel2.SuspendLayout();
@@ -66,16 +68,6 @@
             AdminPage.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
-            
-            // RefreshDataBtn
-            RefreshDataBtn.Dock = DockStyle.Fill;
-            RefreshDataBtn.Location = new Point(3, 603);
-            RefreshDataBtn.Name = "RefreshDataBtn";
-            RefreshDataBtn.Size = new Size(450, 292);
-            RefreshDataBtn.TabIndex = 4;
-            RefreshDataBtn.Text = "Refresh Data";
-            RefreshDataBtn.UseVisualStyleBackColor = true;
-            RefreshDataBtn.Click += RefreshDataBtn_Click;
             // 
             // panel1
             // 
@@ -171,37 +163,69 @@
             // 
             // panel4
             // 
-            panel4.Controls.Add(promptGridView);
+            panel4.Controls.Add(PromptGridView);
             panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(3, 81);
+            panel4.Location = new Point(3, 111);
             panel4.Name = "panel4";
-            panel4.Size = new Size(912, 517);
+            panel4.Size = new Size(912, 487);
             panel4.TabIndex = 1;
             // 
-            // promptGridView
+            // PromptGridView
             // 
-            promptGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            promptGridView.Dock = DockStyle.Fill;
-            promptGridView.Location = new Point(0, 0);
-            promptGridView.Name = "promptGridView";
-            promptGridView.RowHeadersWidth = 51;
-            promptGridView.Size = new Size(912, 517);
-            promptGridView.TabIndex = 0;
+            PromptGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            PromptGridView.Dock = DockStyle.Fill;
+            PromptGridView.Location = new Point(0, 0);
+            PromptGridView.Name = "PromptGridView";
+            PromptGridView.RowHeadersWidth = 51;
+            PromptGridView.Size = new Size(912, 487);
+            PromptGridView.TabIndex = 0;
             // 
             // panel3
             // 
+            panel3.Controls.Add(label1);
+            panel3.Controls.Add(CountPromptLabel);
+            panel3.Controls.Add(DeletePromptBtn);
             panel3.Controls.Add(GetShapeFileBtn);
             panel3.Controls.Add(ImportExcelBtn);
             panel3.Controls.Add(ExportExcelBtn);
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(3, 3);
             panel3.Name = "panel3";
-            panel3.Size = new Size(912, 78);
+            panel3.Size = new Size(912, 108);
             panel3.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(49, 63);
+            label1.Name = "label1";
+            label1.Size = new Size(314, 19);
+            label1.TabIndex = 5;
+            label1.Text = "Prompts của user đang ở trong database.";
+            // 
+            // CountPromptLabel
+            // 
+            CountPromptLabel.AutoSize = true;
+            CountPromptLabel.Location = new Point(14, 63);
+            CountPromptLabel.Name = "CountPromptLabel";
+            CountPromptLabel.Size = new Size(29, 19);
+            CountPromptLabel.TabIndex = 4;
+            CountPromptLabel.Text = "....";
+            // 
+            // DeletePromptBtn
+            // 
+            DeletePromptBtn.ForeColor = Color.Red;
+            DeletePromptBtn.Location = new Point(364, 58);
+            DeletePromptBtn.Name = "DeletePromptBtn";
+            DeletePromptBtn.Size = new Size(94, 29);
+            DeletePromptBtn.TabIndex = 3;
+            DeletePromptBtn.Text = "Xoá ?";
+            DeletePromptBtn.UseVisualStyleBackColor = true;
+            DeletePromptBtn.Click += DeletePromptBtn_Click;
             // 
             // GetShapeFileBtn
             // 
-            GetShapeFileBtn.Location = new Point(559, 25);
+            GetShapeFileBtn.Location = new Point(617, 3);
             GetShapeFileBtn.Name = "GetShapeFileBtn";
             GetShapeFileBtn.Size = new Size(292, 29);
             GetShapeFileBtn.TabIndex = 2;
@@ -211,9 +235,9 @@
             // 
             // ImportExcelBtn
             // 
-            ImportExcelBtn.Location = new Point(244, 25);
+            ImportExcelBtn.Location = new Point(617, 38);
             ImportExcelBtn.Name = "ImportExcelBtn";
-            ImportExcelBtn.Size = new Size(269, 29);
+            ImportExcelBtn.Size = new Size(290, 29);
             ImportExcelBtn.TabIndex = 1;
             ImportExcelBtn.Text = "Import excel prompt vào để RAG";
             ImportExcelBtn.UseVisualStyleBackColor = true;
@@ -221,7 +245,7 @@
             // 
             // ExportExcelBtn
             // 
-            ExportExcelBtn.Location = new Point(5, 25);
+            ExportExcelBtn.Location = new Point(5, 3);
             ExportExcelBtn.Name = "ExportExcelBtn";
             ExportExcelBtn.Size = new Size(203, 29);
             ExportExcelBtn.TabIndex = 0;
@@ -295,13 +319,13 @@
             tableLayoutPanel1.Controls.Add(ChangeAPIGeminiKeyBtn, 1, 0);
             tableLayoutPanel1.Controls.Add(ViewAIModelBtn, 0, 1);
             tableLayoutPanel1.Controls.Add(RefreshBtn, 1, 1);
-            tableLayoutPanel1.Controls.Add(RefreshDataBtn, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(912, 595);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -363,8 +387,9 @@
             panel1.PerformLayout();
             PromptPage.ResumeLayout(false);
             panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)promptGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)PromptGridView).EndInit();
             panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             APIKeyPage.ResumeLayout(false);
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)ApiKeyGridView).EndInit();
@@ -377,7 +402,7 @@
         #endregion
         private TabPage PromptPage;
         private Panel panel4;
-        private DataGridView promptGridView;
+        private DataGridView PromptGridView;
         private Panel panel3;
         private Button ImportExcelBtn;
         private Button ExportExcelBtn;
@@ -397,7 +422,9 @@
         private Button ChangeAPIGeminiKeyBtn;
         private Button ViewAIModelBtn;
         private Button RefreshBtn;
-        private Button RefreshDataBtn;
         private Button UpdateAPIKeyBtn;
+        private Button DeletePromptBtn;
+        private Label label1;
+        private Label CountPromptLabel;
     }
 }

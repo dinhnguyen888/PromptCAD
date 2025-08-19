@@ -21,7 +21,7 @@ namespace PromptCad.AdminPanel.Services
             return httpClient;
         }
 
-       
+
 
         // Refresh admin session token
         public async Task<string> RefreshAdminSessionToken()
@@ -127,7 +127,7 @@ namespace PromptCad.AdminPanel.Services
                 };
 
                 var response = await httpClient.SendAsync(requestMessage);
-                
+
                 if (!response.IsSuccessStatusCode)
                     throw new Exception($"Error deleting API key: {response.ReasonPhrase}");
 
@@ -257,6 +257,19 @@ namespace PromptCad.AdminPanel.Services
                     throw new Exception($"Error deleting all prompts: {response.ReasonPhrase}");
 
                 return true;
+            }
+        }
+
+        // Get All prompts
+        public async Task<GetAllPromptsResponse?> GetAllPrompts()
+        {
+            using (var httpClient = CreateHttpClient())
+            {
+                var response = await httpClient.GetAsync($"{BaseUrl}/get-all-prompts");
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception($"Error fetching all prompts: {response.ReasonPhrase}");
+                var json = await response.Content.ReadAsStringAsync();
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<GetAllPromptsResponse>(json);
             }
         }
     }
