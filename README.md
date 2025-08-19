@@ -54,9 +54,10 @@ public static string ApiUrl { get; set; } = "http://127.0.0.1:8000/api";
 
 4. **Chạy server backend**  
    Trong thư mục `PromptCad.API`, chạy:
-    .\env\Scripts\Activate.ps1
+   ```
+   .\env\Scripts\Activate.ps1
    ```
    ```
    uvicorn main:app --reload 
    ```
-5. **Chạy AdminPanel và Plugin, mở visual studio, chọn PromptCad.Solutions và ấn run**
+6. **Chạy AdminPanel và Plugin, mở visual studio, chọn PromptCad.Solutions và ấn run**
