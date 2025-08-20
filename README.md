@@ -1,63 +1,54 @@
-# Cấu hình Biến Môi Trường - PromptCad
+# PromptCad
 
-## Backend API (.env file)
+![Animation](GitAssets/Animation.gif)
 
-Tạo file `.env` trong thư mục `PromptCad.API/`:
+## Overview
 
-```
-MONGODB_URI=mongodb://localhost:27017
-MONGODB_DB=promptcad_db
-JWT_SECRET=your-secret-key
-JWT_ALGORITHM=HS256
-GEMINI_API_KEY=your-gemini-api-key
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=admin123
-```
+PromptCad is a custom AutoCAD plugin powered by large language models (LLMs) to automate manual CAD drawing tasks through natural language prompts. The system includes a backend API, an admin panel for management, and a plugin that connects directly with AutoCAD.
 
-## AdminPanel Configuration
+## Features
 
-Cập nhật file `PromptCad.AdminPanel/Services/globalAPI.cs`:
+-   Automate CAD drawing tasks in AutoCAD using prompt-based commands.
+-   Backend API for managing prompt workflows, user authentication, and configuration.
+-   AdminPanel for managing users, API keys, and monitoring usage.
+-   AutoCAD plugin for seamless integration and real-time interaction.
+-   Secure storage of sensitive data and API keys.
+-   MongoDB integration for persistent storage of prompts, users, and settings.
 
-```csharp
-public static string ApiUrl { get; set; } = "http://127.0.0.1:8000/api";
-public static string TokenFilePath { get; set; } = "C:\\Users\\Public\\Documents\\AdminPromptCad\\access_token.txt";
-```
+### Backend API
 
-## Plugin Configuration
+1. **Install Python**  
+   Ensure Python 3.8 or higher is installed.
 
-Cập nhật file `PromptCad.Plugin/Utility/globalAPI.cs`:
+2. **Install dependencies**  
+   Navigate to the `PromptCad.API` directory and run:
 
-```csharp
-public static string ApiUrl { get; set; } = "http://127.0.0.1:8000/api";
-```
+    ```
+    pip install -r requirements.txt
+    ```
 
-## Lưu ý
+3. **Set up environment variables**  
+   Create a `.env` file in the `PromptCad.API` directory with the following content:
 
-- Thay đổi các giá trị theo môi trường thực tế
-- Không commit file .env vào git
-- Backup cấu hình trước khi thay đổi
+    ```
+    MONGODB_URI=mongodb://localhost:27017
+    MONGODB_DB=promptcad_db
+    JWT_SECRET=your-secret-key
+    JWT_ALGORITHM=HS256
+    GEMINI_API_KEY=your-gemini-api-key
+    ADMIN_EMAIL=admin@example.com
+    ADMIN_PASSWORD=admin123
+    ```
 
-## Hướng dẫn chạy Backend (Python)
+4. **Run the backend server**  
+   Activate the virtual environment and start the server:
+    ```
+    .\env\Scripts\Activate.ps1
+    uvicorn main:app --reload
+    ```
 
-1. **Cài đặt Python**  
-   Đảm bảo bạn đã cài đặt Python 3.8 trở lên.
+### AdminPanel and Plugin
 
-2. **Cài đặt các thư viện cần thiết**  
-   Mở terminal/cmd và chạy:
-   ```
-   pip install -r requirements.txt
-   ```
-   (Chạy lệnh này trong thư mục `PromptCad.API`)
-
-3. **Tạo file cấu hình môi trường**  
-   Tạo file `.env` trong thư mục `PromptCad.API` như hướng dẫn ở trên.
-
-4. **Chạy server backend**  
-   Trong thư mục `PromptCad.API`, chạy:
-   ```
-   .\env\Scripts\Activate.ps1
-   ```
-   ```
-   uvicorn main:app --reload 
-   ```
-6. **Chạy AdminPanel và Plugin, mở visual studio, chọn PromptCad.Solutions và ấn run**
+1. Open Visual Studio and load the `PromptCad.sln` solution.
+2. Configure the `globalAPI.cs` files in both `PromptCad.AdminPanel` and `PromptCad.Plugin` projects with the appropriate API URL.
+3. Run the solution to start the AdminPanel and Plugin.
