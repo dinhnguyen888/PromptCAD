@@ -19,7 +19,7 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
 {
     public partial class ProcessDataServices
     {
-        public void ProcessDrawResponse(PromptResponse response, Point3d insertionPoint)
+        public void ProcessObjectResponse(PromptResponse response, Point3d insertionPoint)
         {
             try
             {
@@ -37,6 +37,8 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
                         throw new System.Exception("No Lisp code found in response.");
 
                     string escaped = FilterAutolispCode(lispCode);
+                    
+                    HandleLispFile.WriteLispFile(escaped);
 
                     doc.SendStringToExecute(escaped, true, false, false);
                 }
@@ -70,7 +72,6 @@ namespace PromptCad.Plugin.Services.ProcessDataServices
             // Trả về Lisp code thuần, không escape
             return result;
         }
-
     }
 
 
